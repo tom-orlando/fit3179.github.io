@@ -1,0 +1,97 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "background": "white",
+  "padding": 5,
+  "width": 800,
+  "height": 600,
+  "title": {"text": "Median sale price by NY neighborhood", "frame": "group"},
+  "style": "cell",
+  "data": [
+    {
+      "name": "source_1",
+      "url": "/nyc-rolling-sales-clean_v2.csv",
+      "format": {"type": "csv"}
+    },
+    {
+      "name": "source_0",
+      "url": "/nyc_neighborhoods.topo.json",
+      "format": {
+        "type": "topojson",
+        "feature": "nyc_neighborhoods",
+        "parse": {}
+      },
+      "transform": [
+        {
+          "type": "formula",
+          "expr": "datum[\"properties\"] && datum[\"properties\"][\"neighborhood\"]",
+          "as": "properties.neighborhood"
+        },
+        {
+          "type": "lookup",
+          "from": "source_1",
+          "key": "NEIGHBORHOOD",
+          "fields": ["properties.neighborhood"],
+          "values": ["price"]
+        },
+        {
+          "type": "aggregate",
+          "groupby": ["NEIGHBORHOOD"],
+          "ops": ["median"],
+          "fields": ["price"],
+          "as": ["median_price"]
+        },
+        {
+          "type": "filter",
+          "expr": "isValid(datum[\"Price\"]) && isFinite(+datum[\"Price\"])"
+        }
+      ]
+    }
+  ],
+  "projections": [
+    {
+      "name": "projection",
+      "size": {"signal": "[width, height]"},
+      "fit": {"signal": "data('source_0')"},
+      "type": "equalEarth"
+    }
+  ],
+  "marks": [
+    {
+      "name": "marks",
+      "type": "shape",
+      "style": ["geoshape"],
+      "from": {"data": "source_0"},
+      "encode": {
+        "update": {
+          "fill": {"scale": "color", "field": "Price"},
+          "tooltip": {
+            "signal": "{\"Neighborhood\": isValid(datum[\"properties.neighborhood\"]) ? datum[\"properties.neighborhood\"] : \"\"+datum[\"properties.neighborhood\"], \"Sale price\": format(datum[\"Sale price\"], \"\")}"
+          },
+          "ariaRoleDescription": {"value": "geoshape"},
+          "description": {
+            "signal": "\"Price: \" + (format(datum[\"Price\"], \"\")) + \"; Neighborhood: \" + (isValid(datum[\"properties.neighborhood\"]) ? datum[\"properties.neighborhood\"] : \"\"+datum[\"properties.neighborhood\"]) + \"; Sale price: \" + (format(datum[\"Sale price\"], \"\"))"
+          }
+        }
+      },
+      "transform": [{"type": "geoshape", "projection": "projection"}]
+    }
+  ],
+  "scales": [
+    {
+      "name": "color",
+      "type": "linear",
+      "domain": {"data": "source_0", "field": "Price"},
+      "range": "heatmap",
+      "interpolate": "hcl",
+      "zero": false
+    }
+  ],
+  "legends": [
+    {
+      "fill": "color",
+      "gradientLength": {"signal": "clamp(height, 64, 200)"},
+      "title": "Price"
+    }
+  ],
+  "config": {}
+}
