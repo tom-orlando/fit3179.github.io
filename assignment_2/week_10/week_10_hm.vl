@@ -59,7 +59,7 @@
   "type": "quantitative",
   "title": "Gross Square Feet",
   "axis": {"tickCount": 7},
-  "scale": {"type": "log", "domain": [100, 10000000]}
+  "scale": {"type": "log","domain": [100, 1200000]}
   },
   "y": {
   "field": "price",
