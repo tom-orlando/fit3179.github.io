@@ -3,9 +3,9 @@
   "width": 800,
   "height": 600,
   "title": "Median sale price by NY neighborhood",
-  "projection": {"type": "equalEarth"},
+  "projection": {"type": "equirectangular"},
   "data": {
-    "url": "/nyc_neighborhoods.topo.json",
+    "url": "https://raw.githubusercontent.com/tom-orlando/tom-orlando.github.io/master/nyc_neighborhoods.topo.json",
     "format": {"type": "topojson", "feature": "nyc_neighborhoods"}
   },
 
@@ -14,32 +14,24 @@
     "lookup": "properties.neighborhood",
     "from": {
       "data": {
-        "url": "/nyc-rolling-sales-clean_v2.csv"
+        "url": "https://raw.githubusercontent.com/tom-orlando/tom-orlando.github.io/master/data/nyc-rolling-sales-clean_v4.csv"
         },
-      "key": "NEIGHBORHOOD",
+      "key": "neighborhood",
       "fields": ["price"]
       }
     },
-    {
-      "aggregate": [{
-        "op": "median",
-        "field": "price",
-        "as": "median_price"
-      }],
-    "groupby": ["NEIGHBORHOOD"]}
+    {"calculate": "datum.price", "as": "Sale price"}
   ],
-
   "mark": {"type": "geoshape"},
-  
   "encoding": {
     "color": {
-      "field": "Price",
-      "type": "quantitative"
+      "field": "Sale price",
+      "type": "quantitative",
+      "scale": {"type": "log"}
     },
-
     "tooltip": [
       {"field": "properties.neighborhood", "title": "Neighborhood"},
-      {"field": "Sale price", "type": "quantitative"}
+      {"field": "price", "type": "quantitative"}
     ]
   }
 }
