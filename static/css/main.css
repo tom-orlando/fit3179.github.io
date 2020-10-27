@@ -368,10 +368,20 @@ nav ul li a:hover {
     box-shadow: 0 30px 60px -12px rgba(50,50,93,.25), 
     0 18px 36px -18px rgba(0,0,0,.3), 
     0 -12px 36px -8px rgba(0,0,0,.025);
-    padding: 0.5em 1.2em 1.5em; 
+    padding: 1.5em; 
     border-radius: 5px;
-    margin: 10em 10em 5em;
+    margin: 10em 14em 5em;
   }
+
+  .graph-outline {
+    box-shadow: 0 30px 60px -12px rgba(50,50,93,.25), 
+    0 18px 36px -18px rgba(0,0,0,.3), 
+    0 -12px 36px -8px rgba(0,0,0,.025);
+    padding: 1.5em; 
+    border-radius: 5px;
+    margin: 6em 2em 5em;
+  }
+
 
   .container-form {
     text-align: left;

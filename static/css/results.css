@@ -4,6 +4,7 @@
 .container-info {
   display: flex;
   text-align: left;
+  padding: 2em;
 }
 
 .info-text {
