@@ -1,0 +1,95 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "background": "white",
+  "padding": 5,
+  "width": 800,
+  "height": 600,
+  "title": {"text": "Maximum sale price by NY neighborhood", "frame": "group"},
+  "style": "cell",
+  "data": [
+    {
+      "name": "source_1",
+      "url": "/data/nyc-rolling-sales-clean_v4.csv",
+      "format": {"type": "csv", "delimiter": ","}
+    },
+    {
+      "name": "source_0",
+      "url": "https://raw.githubusercontent.com/tom-orlando/tom-orlando.github.io/master/nyc_neighborhoods.topo.json",
+      "format": {
+        "type": "topojson",
+        "feature": "nyc_neighborhoods",
+        "parse": {}
+      },
+      "transform": [
+        {
+          "type": "formula",
+          "expr": "datum[\"properties\"] && datum[\"properties\"][\"neighborhood\"]",
+          "as": "properties.neighborhood"
+        },
+        {
+          "type": "lookup",
+          "from": "source_1",
+          "key": "neighborhood",
+          "fields": ["properties.neighborhood"],
+          "values": ["price", "gross_sq_ft", "total_unit"]
+        },
+        {
+          "type": "formula",
+          "expr": "datum.price/datum.total_unit",
+          "as": "Price per unit"
+        },
+        {
+          "type": "filter",
+          "expr": "isValid(datum[\"Price per unit\"]) && isFinite(+datum[\"Price per unit\"])"
+        }
+      ]
+    }
+  ],
+  "projections": [
+    {
+      "name": "projection",
+      "size": {"signal": "[width, height]"},
+      "fit": {"signal": "data('source_0')"},
+      "type": "equirectangular"
+    }
+  ],
+  "marks": [
+    {
+      "name": "marks",
+      "type": "shape",
+      "style": ["geoshape"],
+      "from": {"data": "source_0"},
+      "encode": {
+        "update": {
+          "fill": {"scale": "color", "field": "Price per unit"},
+          "tooltip": {
+            "signal": "{\"Neighborhood\": isValid(datum[\"properties.neighborhood\"]) ? datum[\"properties.neighborhood\"] : \"\"+datum[\"properties.neighborhood\"], \"price\": format(datum[\"price\"], \"\"), \"Price per unit\": format(datum[\"Price per unit\"], \".2f\")}"
+          },
+          "ariaRoleDescription": {"value": "geoshape"},
+          "description": {
+            "signal": "\"Price per unit: \" + (format(datum[\"Price per unit\"], \"\")) + \"; Neighborhood: \" + (isValid(datum[\"properties.neighborhood\"]) ? datum[\"properties.neighborhood\"] : \"\"+datum[\"properties.neighborhood\"]) + \"; price: \" + (format(datum[\"price\"], \"\"))"
+          }
+        }
+      },
+      "transform": [{"type": "geoshape", "projection": "projection"}]
+    }
+  ],
+  "scales": [
+    {
+      "name": "color",
+      "type": "threshold",
+      "domain": [1000000, 10000000, 100000000, 1000000000],
+      "range": ["#caf0f8", "#90e0ef", "#0096c7", "#03045e"],
+      "interpolate": "hcl"
+    }
+  ],
+  "legends": [
+    {
+      "fill": "color",
+      "labelOverlap": "greedy",
+      "symbolType": "circle",
+      "title": "Price per unit"
+    }
+  ],
+  "config": {}
+}

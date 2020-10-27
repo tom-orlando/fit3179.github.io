@@ -2,20 +2,107 @@
 <html>
 <head>
   <!-- Import Vega & Vega-Lite (does not have to be from CDN) -->
+  <title>FIT3179 | Assignment 2</title>
   <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
   <script src="https://cdn.jsdelivr.net/npm/vega-lite@4"></script>
   <!-- Import vega-embed -->
   <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <link rel="stylesheet" href="/static/css/main.css">
+  <link rel="stylesheet" href="/static/css/results.css">
 </head>
 <body>
 
-  <h1>Visualising the world's hottest property market</h1>
-  <div id="vis"></div>
+  <section>
+    <div class="container">
+      <section>
+        <img class="heart" src="/static/images/ny_logo.svg" alt="NY Graphic">
+        <h1 class="heart_tagline">Visualising the hottest property market in the world</h1>
+        <p class="subhead">New York State has one of the most active and glamorous real estate markets in the world<br><br><b>Explore the data yourself</b></b></p>
+      </section>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="form-outline-main">
+        <div id="vis2"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="dark-container">
+      <div class="container">
+        <ul>
+          <li>
+            <p>
+              <b>Rents in New York have risen to record heights of late.</b>
+              Manhattan rent reached an all-time high of $US3,217 in the first three months of 2019, according to a StreetEasy Manhattan Rent Index report
+            </p>
+          </li>  
+          <li>
+            <p>
+              <b>Nearly two-thirds of residents in New York live in rent-occupied units.</b>
+              The number of people renting housing units in New York alone is more than twice the national average</b>
+            </p>
+          </li>
+          <li>
+            <p>
+              <b>Yankee Stadium couldn’t hold all the New Yorkers who are living in homeless shelters.</b>
+              The average number of people staying in city shelters nightly peaked to a record of nearly 64,000 people in January 2019
+            </p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <div class="container-info">
+        <div class="info-text">
+          <h4>Which boroughs are most expensive?</h4>
+          <p>New York's Manhattan borough is by far the most prestigious and expensive of the five. You can see for yourself using the filtering feature
+            in the adjacent bubble plot. This fact is due to the large office buildings and commercial property in iconic spots like Wall St and Times Square.
+            <br><br>Residential property around central park is also not cheap! 
+          </p>
+        </div>  
+        <div class="form-outline-main">
+          <div id="vis2"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <div id="vis1"></div>
+
+  <footer>
+    <div class="footer-container">
+      <div class="container">
+        <a href="#">
+          <img class="sa-logo" src="/static/images/monash.png" alt="Hearty Logo">
+        </a>  
+        <p class="address">13 Ancora Imparo Way,  Monash University,  3800<br>VIC</p>
+        <ul class="footer-links">
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
   <script type="text/javascript">
-    var spec = "https://tom-orlando.github.io/dot_plot.vg.json";
-    vegaEmbed('#vis', spec).then(function(result) {
+    var specVis1 = "https://tom-orlando.github.io/chloro.vg.json";
+    var specVis2 = "https://tom-orlando.github.io/dot_plot.vg.json";
+
+    vegaEmbed('#vis1', specVis1, {"actions":false}).then(function(result) {
+      // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+    }).catch(console.error);
+
+    vegaEmbed('#vis2', specVis2, {"actions":false}).then(function(result) {
       // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
     }).catch(console.error);
   </script>
+
 </body>
 </html>

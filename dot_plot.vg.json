@@ -226,7 +226,7 @@
       "name": "color",
       "type": "ordinal",
       "domain": ["1", "2", "3", "4", "5"],
-      "range": ["#e41a1c", "#984ea3", "#ff7f00", "#a6cee3", "#377eb8"]
+      "range": ["#111728", "#03045e", "#0096c7", "#90e0ef", "#caf0f8"]
     },
     {
       "name": "size",
