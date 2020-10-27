@@ -4,13 +4,13 @@
   "padding": 5,
   "width": 800,
   "height": 600,
-  "title": {"text": "Property sales by NYC boroughs", "frame": "group"},
+  "title": {"text": "Property sales in New York State", "frame": "group"},
   "style": "cell",
   "data": [
     {"name": "borough_highlight_store"},
     {
       "name": "source_0",
-      "url": "https://raw.githubusercontent.com/tom-orlando/tom-orlando.github.io/master/assignment_2/week_10/nyc-rolling-sales-clean_v4.csv",
+      "url": "https://raw.githubusercontent.com/tom-orlando/tom-orlando.github.io/master/data/nyc-rolling-sales-clean_v4.csv",
       "format": {"type": "csv", "delimiter": ","},
       "transform": [
         {"type": "filter", "expr": "datum.gross_sq_ft > 0"},
@@ -218,7 +218,7 @@
     {
       "name": "y",
       "type": "log",
-      "domain": [1, 2500000000],
+      "domain": [5000, 2500000000],
       "range": [{"signal": "height"}, 0],
       "nice": true
     },
