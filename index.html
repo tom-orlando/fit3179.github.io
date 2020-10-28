@@ -94,7 +94,7 @@
     <div class="container">
       <div class="container-info">
         <div class="graph-outline">
-          <div id="vis2"></div>
+          <div id="vis3"></div>
         </div>
         <div class="info-text">
           <h2>Which boroughs are most expensive?</h2>
@@ -125,12 +125,17 @@
   <script type="text/javascript">
     var specVis1 = "https://tom-orlando.github.io/chloro.vg.json";
     var specVis2 = "https://tom-orlando.github.io/dot_plot.vg.json";
+    var specVis3 = "https://tom-orlando.github.io/area_plot.vg.json";
 
     vegaEmbed('#vis1', specVis1, {"actions":false}).then(function(result) {
       // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
     }).catch(console.error);
 
     vegaEmbed('#vis2', specVis2, {"actions":false}).then(function(result) {
+      // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+    }).catch(console.error);
+    
+    vegaEmbed('#vis3', specVis3, {"actions":false}).then(function(result) {
       // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
     }).catch(console.error);
   </script>
