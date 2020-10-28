@@ -1,0 +1,163 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "Property prices over time",
+  "background": "white",
+  "padding": 5,
+  "width": 800,
+  "height": 600,
+  "title": {"text": "Property sales in New York State", "frame": "group"},
+  "style": "cell",
+  "data": [
+    {
+      "name": "source_0",
+      "url": "https://raw.githubusercontent.com/tom-orlando/tom-orlando.github.io/master/data/nyc-rolling-sales-clean_v4.csv",
+      "format": {
+        "type": "csv",
+        "parse": {"year_built": "date"},
+        "delimiter": ","
+      },
+      "transform": [
+        {"type": "filter", "expr": "datum.price > 1000"},
+        {
+          "type": "aggregate",
+          "groupby": ["year_built"],
+          "ops": ["median"],
+          "fields": ["price"],
+          "as": ["median_price"]
+        }
+      ]
+    }
+  ],
+  "marks": [
+    {
+      "name": "layer_0_marks",
+      "type": "area",
+      "style": ["area"],
+      "sort": {"field": "datum[\"year_built\"]"},
+      "from": {"data": "source_0"},
+      "encode": {
+        "update": {
+          "opacity": {"value": 0.7},
+          "strokeOpacity": {"value": 1},
+          "interpolate": {"value": "catmull-rom"},
+          "orient": {"value": "vertical"},
+          "fill": {
+            "value": {
+              "x1": 1,
+              "y1": 1,
+              "x2": 1,
+              "y2": 0,
+              "gradient": "linear",
+              "stops": [
+                {"offset": 0, "color": "white"},
+                {"offset": 1, "color": "#0096c7"}
+              ]
+            }
+          },
+          "tooltip": {
+            "signal": "{\"median_price\": format(datum[\"median_price\"], \"\")}"
+          },
+          "description": {
+            "signal": "\"Year built: \" + (timeFormat(datum[\"year_built\"], '%b %d, %Y')) + \"; Price: \" + (format(datum[\"median_price\"], \"\")) + \"; median_price: \" + (format(datum[\"median_price\"], \"\"))"
+          },
+          "x": {"scale": "x", "field": "year_built"},
+          "y": {"scale": "y", "field": "median_price"},
+          "y2": {"scale": "y", "value": 0},
+          "defined": {
+            "signal": "isValid(datum[\"year_built\"]) && isFinite(+datum[\"year_built\"]) && isValid(datum[\"median_price\"]) && isFinite(+datum[\"median_price\"])"
+          }
+        }
+      }
+    },
+    {
+      "name": "layer_1_marks",
+      "type": "line",
+      "style": ["line"],
+      "sort": {"field": "datum[\"year_built\"]"},
+      "from": {"data": "source_0"},
+      "encode": {
+        "update": {
+          "interpolate": {"value": "catmull-rom"},
+          "stroke": {"value": "#0096c7"},
+          "tooltip": {
+            "signal": "{\"median_price\": format(datum[\"median_price\"], \"\")}"
+          },
+          "description": {
+            "signal": "\"Year built: \" + (timeFormat(datum[\"year_built\"], '%b %d, %Y')) + \"; Price: \" + (format(datum[\"median_price\"], \"\")) + \"; median_price: \" + (format(datum[\"median_price\"], \"\"))"
+          },
+          "x": {"scale": "x", "field": "year_built"},
+          "y": {"scale": "y", "field": "median_price"},
+          "defined": {
+            "signal": "isValid(datum[\"year_built\"]) && isFinite(+datum[\"year_built\"]) && isValid(datum[\"median_price\"]) && isFinite(+datum[\"median_price\"])"
+          }
+        }
+      }
+    }
+  ],
+  "scales": [
+    {
+      "name": "x",
+      "type": "time",
+      "domain": {"data": "source_0", "field": "year_built"},
+      "range": [0, {"signal": "width"}]
+    },
+    {
+      "name": "y",
+      "type": "linear",
+      "domain": {"data": "source_0", "field": "median_price"},
+      "range": [{"signal": "height"}, 0],
+      "nice": true,
+      "zero": true
+    }
+  ],
+  "axes": [
+    {
+      "scale": "x",
+      "orient": "bottom",
+      "gridScale": "y",
+      "grid": true,
+      "tickCount": {"signal": "ceil(width/40)"},
+      "domain": false,
+      "labels": false,
+      "aria": false,
+      "maxExtent": 0,
+      "minExtent": 0,
+      "ticks": false,
+      "zindex": 0
+    },
+    {
+      "scale": "y",
+      "orient": "left",
+      "tickCount": 6,
+      "gridScale": "x",
+      "grid": true,
+      "domain": false,
+      "labels": false,
+      "aria": false,
+      "maxExtent": 0,
+      "minExtent": 0,
+      "ticks": false,
+      "zindex": 0
+    },
+    {
+      "scale": "x",
+      "orient": "bottom",
+      "grid": false,
+      "title": "Year built",
+      "labelFlush": true,
+      "labelOverlap": true,
+      "tickCount": {"signal": "ceil(width/40)"},
+      "zindex": 0
+    },
+    {
+      "scale": "y",
+      "orient": "left",
+      "grid": false,
+      "title": "Price",
+      "tickCount": 6,
+      "labelOverlap": true,
+      "zindex": 0
+    }
+  ],
+  "config": {}
+}
