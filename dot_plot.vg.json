@@ -193,7 +193,7 @@
             {"value": 0}
           ],
           "tooltip": {
-            "signal": "{\"neighborhood\": isValid(datum[\"neighborhood\"]) ? datum[\"neighborhood\"] : \"\"+datum[\"neighborhood\"], \"gross_sq_ft\": format(datum[\"gross_sq_ft\"], \",\"), \"price\": format(datum[\"price\"], \",\"), \"total_unit\": format(datum[\"total_unit\"], \",\"), \"Cases per 10,000 Population\": format(datum[\"Cases per 10,000 Population\"], \".2f\")}"
+            "signal": "{\"neighborhood\": isValid(datum[\"neighborhood\"]) ? datum[\"neighborhood\"] : \"\"+datum[\"neighborhood\"], \"gross_sq_ft\": format(datum[\"gross_sq_ft\"], \",\"), \"price\": format(datum[\"price\"], \",\"), \"total_unit\": format(datum[\"total_unit\"], \",\"), \"Price per unit\": format(datum[\"Price per unit\"], \".2f\")}"
           },
           "description": {
             "signal": "\"Gross Square Feet: \" + (format(datum[\"gross_sq_ft\"], \"\")) + \"; price: \" + (format(datum[\"price\"], \"\")) + \"; neighborhood: \" + (isValid(datum[\"neighborhood\"]) ? datum[\"neighborhood\"] : \"\"+datum[\"neighborhood\"]) + \"; gross_sq_ft: \" + (format(datum[\"gross_sq_ft\"], \",\")) + \"; total_unit: \" + (format(datum[\"total_unit\"], \",\")) + \"; Cases per 10,000 Population: \" + (format(datum[\"Cases per 10,000 Population\"], \".2f\"))"
