@@ -1,0 +1,64 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "description": "Property prices over time",
+  "width": 800,
+  "height": 600,
+  "title": {"text": "Property sales in New York State", "frame": "group"},
+  "data": {
+    "url": "data/nyc-rolling-sales-clean_v4.csv"
+  },
+  "transform": [
+    {"filter": "datum.price > 1000"},
+    {
+      "aggregate": [{
+       "op": "median",
+       "field": "price",
+       "as": "median_price"
+      }],
+      "groupby": ["year_built"]
+    }
+  ],
+  "mark": {
+    "type": "area",
+    "interpolate": "catmull-rom",
+    "line": {
+      "color": "#0096c7"
+    },
+    "color": {
+      "x1": 1,
+      "y1": 1,
+      "x2": 1,
+      "y2": 0,
+      "gradient": "linear",
+      "stops": [
+        {
+          "offset": 0,
+          "color": "white"
+        },
+        {
+          "offset": 1,
+          "color": "#0096c7"
+        }
+      ]
+    },
+    "strokeOpacity": 1
+  },
+  "encoding": {
+    "x": {
+      "field": "year_built",
+      "type": "temporal",
+      "title": "Year built"
+    },
+    "y": {
+      "field": "median_price",
+      "type": "quantitative",
+      "axis": {"tickCount": 6},
+      "title": "Price"
+    },
+  
+  "tooltip": [
+    {"field": "median_price", "type": "quantitative"}
+    ]   
+  }
+  
+}
