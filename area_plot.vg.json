@@ -3,7 +3,7 @@
   "description": "Property prices over time",
   "background": "white",
   "padding": 5,
-  "width": 800,
+  "width": 700,
   "height": 600,
   "title": {"text": "Property sales in New York State", "frame": "group"},
   "style": "cell",
