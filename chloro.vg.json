@@ -3,8 +3,8 @@
   "background": "white",
   "padding": 5,
   "width": 700,
-  "height": 600,
-  "title": {"text": "Maximum sale price by NY neighborhood", "frame": "group"},
+  "height": 500,
+  "title": {"text": "Property sales in New York State", "frame": "group", "fontSize": 25, "font": "Montserrat"},
   "style": "cell",
   "data": [
     {
@@ -21,6 +21,7 @@
         "parse": {}
       },
       "transform": [
+        
         {
           "type": "formula",
           "expr": "datum[\"properties\"] && datum[\"properties\"][\"neighborhood\"]",
@@ -63,11 +64,11 @@
         "update": {
           "fill": {"scale": "color", "field": "Price per unit"},
           "tooltip": {
-            "signal": "{\"Neighborhood\": isValid(datum[\"properties.neighborhood\"]) ? datum[\"properties.neighborhood\"] : \"\"+datum[\"properties.neighborhood\"], \"price\": format(datum[\"price\"], \"\"), \"Price per unit\": format(datum[\"Price per unit\"], \".2f\")}"
+            "signal": "{\"Neighborhood\": isValid(datum[\"properties.neighborhood\"]) ? datum[\"properties.neighborhood\"] : \"\"+datum[\"properties.neighborhood\"], \"Price\": format(datum[\"price\"], \",\"), \"Price per unit\": format(datum[\"Price per unit\"], \",\")}"
           },
           "ariaRoleDescription": {"value": "geoshape"},
           "description": {
-            "signal": "\"Price per unit: \" + (format(datum[\"Price per unit\"], \"\")) + \"; Neighborhood: \" + (isValid(datum[\"properties.neighborhood\"]) ? datum[\"properties.neighborhood\"] : \"\"+datum[\"properties.neighborhood\"]) + \"; price: \" + (format(datum[\"price\"], \"\"))"
+            "signal": "\"Price per unit: \" + (format(datum[\"Price per unit\"], \"\")) + \"; Neighborhood: \" + (isValid(datum[\"properties.neighborhood\"]) ? datum[\"properties.neighborhood\"] : \"\"+datum[\"properties.neighborhood\"]) + \"; Price: \" + (format(datum[\"price\"], \"\"))"
           }
         }
       },
@@ -88,7 +89,8 @@
       "fill": "color",
       "labelOverlap": "greedy",
       "symbolType": "circle",
-      "title": "Price per unit"
+      "title": "Median price per unit",
+      "format": ","
     }
   ],
   "config": {}

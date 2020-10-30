@@ -4,8 +4,8 @@
   "background": "white",
   "padding": 5,
   "width": 700,
-  "height": 600,
-  "title": {"text": "Property sales in New York State", "frame": "group"},
+  "height": 500,
+  "title": {"text": "Price based on year built", "frame": "group", "fontSize": 25, "font": "Montserrat"},
   "style": "cell",
   "data": [
     {
@@ -17,7 +17,9 @@
         "delimiter": ","
       },
       "transform": [
-        {"type": "filter", "expr": "datum.price > 1000"},
+        {"type": "filter", "expr": "datum.price > 300000"},
+        {"type": "filter", "expr": "datum.price < 10000000"},
+        {"type": "filter", "expr": "datum.price < 10000000"},
         {
           "type": "aggregate",
           "groupby": ["year_built"],
@@ -55,7 +57,7 @@
             }
           },
           "tooltip": {
-            "signal": "{\"median_price\": format(datum[\"median_price\"], \"\")}"
+            "signal": "{\"Median price\": format(datum[\"median_price\"], \",\"), \"Year built\": (timeFormat(datum[\"year_built\"], '%Y'))}"
           },
           "description": {
             "signal": "\"Year built: \" + (timeFormat(datum[\"year_built\"], '%b %d, %Y')) + \"; Price: \" + (format(datum[\"median_price\"], \"\")) + \"; median_price: \" + (format(datum[\"median_price\"], \"\"))"
@@ -115,7 +117,7 @@
       "scale": "x",
       "orient": "bottom",
       "gridScale": "y",
-      "grid": true,
+      "grid": false,
       "tickCount": {"signal": "ceil(width/40)"},
       "domain": false,
       "labels": false,
@@ -130,7 +132,7 @@
       "orient": "left",
       "tickCount": 6,
       "gridScale": "x",
-      "grid": true,
+      "grid": false,
       "domain": false,
       "labels": false,
       "aria": false,
