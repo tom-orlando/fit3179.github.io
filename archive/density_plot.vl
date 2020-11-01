@@ -1,0 +1,49 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "width": 700,
+  "height": 500,
+  "title": {"text": "Distribution of prices by borough", "frame": "group", "fontSize": 25, "font": "Montserrat"},
+  "data": {
+    "url": "https://raw.githubusercontent.com/tom-orlando/tom-orlando.github.io/master/data/nyc-rolling-sales-clean_v4.csv"
+   },
+  "selection": {
+  "grid": {
+    "type": "interval", "bind": "scales"
+  }
+  },
+  "mark":{"type": "area",
+  "interpolate": "catmull-rom",
+  "line": {
+    "color": "#0096c7"
+  },
+  "color": {
+    "x1": 1,
+    "y1": 1,
+    "x2": 1,
+    "y2": 0,
+    "gradient": "linear",
+    "stops": [
+      {
+        "offset": 0,
+        "color": "white"
+      },
+      {
+        "offset": 1,
+        "color": "#0096c7"
+      }
+    ]
+  },
+  "strokeOpacity": 1},
+  "transform": [
+    {
+      "density": "price",
+      "groupby": ["borough"],
+      "extent": [0, 20000000]
+    }
+  ],
+  "encoding": {
+    "x": {"field": "value", "type": "quantitative", "title": "Price", "scale": {"domain": [0, 2000000]}},
+    "y": {"field": "density", "type": "quantitative", "stack": "zero", "title": "Density", "scale": {"domain": [0, 0.000003]}},
+    "color": {"field": "borough", "type": "nominal", "scale": {"range": ["#03045e", "#0096c7", "#90e0ef", "#c77dff","#3a86ff"]}}
+}
+}

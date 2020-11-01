@@ -1,0 +1,178 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "A vertical box plot showing median, min, and max gross square feet.",
+  "background": "white",
+  "padding": 5,
+  "width": 700,
+  "height": 500,
+  "title": {
+    "text": "Distribution of prices by borough",
+    "frame": "group",
+    "fontSize": 25,
+    "font": "Montserrat"
+  },
+  "style": "cell",
+  "data": [
+    {
+      "name": "source_0",
+      "url": "https://raw.githubusercontent.com/tom-orlando/tom-orlando.github.io/master/data/nyc-rolling-sales-clean_v4.csv",
+      "format": {"type": "csv", "delimiter": ","},
+      "transform": [
+        {
+          "type": "aggregate",
+          "groupby": ["borough"],
+          "ops": ["q1", "q3", "median", "min", "max"],
+          "fields": ["price", "price", "price", "price", "price"],
+          "as": [
+            "lower_box_price",
+            "upper_box_price",
+            "mid_box_price",
+            "lower_whisker_price",
+            "upper_whisker_price"
+          ]
+        }
+      ]
+    }
+  ],
+  "marks": [
+    {
+      "name": "layer_0_marks",
+      "type": "rule",
+      "style": ["rule", "boxplot-rule"],
+      "aria": false,
+      "from": {"data": "source_0"},
+      "encode": {
+        "update": {
+          "stroke": {"value": "black"},
+          "tooltip": {
+            "signal": "{\"Max of Price\": format(datum[\"upper_whisker_price\"], \"\"), \"Q3 of Price\": format(datum[\"upper_box_price\"], \"\"), \"Median of Price\": format(datum[\"mid_box_price\"], \"\"), \"Q1 of Price\": format(datum[\"lower_box_price\"], \"\"), \"Min of Price\": format(datum[\"lower_whisker_price\"], \"\"), \"Borough\": isValid(datum[\"borough\"]) ? datum[\"borough\"] : \"\"+datum[\"borough\"], \"borough\": isValid(datum[\"borough\"]) ? datum[\"borough\"] : \"\"+datum[\"borough\"]}"
+          },
+          "x": {"scale": "x", "field": "borough", "band": 0.5},
+          "y": {"scale": "y", "field": "lower_whisker_price"},
+          "y2": {"scale": "y", "field": "lower_box_price"}
+        }
+      }
+    },
+    {
+      "name": "layer_1_marks",
+      "type": "rule",
+      "style": ["rule", "boxplot-rule"],
+      "aria": false,
+      "from": {"data": "source_0"},
+      "encode": {
+        "update": {
+          "stroke": {"value": "black"},
+          "tooltip": {
+            "signal": "{\"Max of Price\": format(datum[\"upper_whisker_price\"], \"\"), \"Q3 of Price\": format(datum[\"upper_box_price\"], \"\"), \"Median of Price\": format(datum[\"mid_box_price\"], \"\"), \"Q1 of Price\": format(datum[\"lower_box_price\"], \"\"), \"Min of Price\": format(datum[\"lower_whisker_price\"], \"\"), \"Borough\": isValid(datum[\"borough\"]) ? datum[\"borough\"] : \"\"+datum[\"borough\"], \"borough\": isValid(datum[\"borough\"]) ? datum[\"borough\"] : \"\"+datum[\"borough\"]}"
+          },
+          "x": {"scale": "x", "field": "borough", "band": 0.5},
+          "y": {"scale": "y", "field": "upper_box_price"},
+          "y2": {"scale": "y", "field": "upper_whisker_price"}
+        }
+      }
+    },
+    {
+      "name": "layer_2_marks",
+      "type": "rect",
+      "style": ["bar", "boxplot-box"],
+      "from": {"data": "source_0"},
+      "encode": {
+        "update": {
+          "ariaRoleDescription": {"value": "box"},
+          "fill": {"scale": "color", "field": "borough"},
+          "tooltip": {
+            "signal": "{\"Max of Price\": format(datum[\"upper_whisker_price\"], \"\"), \"Q3 of Price\": format(datum[\"upper_box_price\"], \"\"), \"Median of Price\": format(datum[\"mid_box_price\"], \"\"), \"Q1 of Price\": format(datum[\"lower_box_price\"], \"\"), \"Min of Price\": format(datum[\"lower_whisker_price\"], \"\"), \"Borough\": isValid(datum[\"borough\"]) ? datum[\"borough\"] : \"\"+datum[\"borough\"], \"borough\": isValid(datum[\"borough\"]) ? datum[\"borough\"] : \"\"+datum[\"borough\"]}"
+          },
+          "description": {
+            "signal": "\"Price: \" + (format(datum[\"lower_box_price\"], \"\")) + \"; upper_box_price: \" + (format(datum[\"upper_box_price\"], \"\")) + \"; Borough: \" + (isValid(datum[\"borough\"]) ? datum[\"borough\"] : \"\"+datum[\"borough\"]) + \"; borough: \" + (isValid(datum[\"borough\"]) ? datum[\"borough\"] : \"\"+datum[\"borough\"]) + \"; Max of Price: \" + (format(datum[\"upper_whisker_price\"], \"\")) + \"; Q3 of Price: \" + (format(datum[\"upper_box_price\"], \"\")) + \"; Median of Price: \" + (format(datum[\"mid_box_price\"], \"\")) + \"; Q1 of Price: \" + (format(datum[\"lower_box_price\"], \"\")) + \"; Min of Price: \" + (format(datum[\"lower_whisker_price\"], \"\"))"
+          },
+          "xc": {"scale": "x", "field": "borough", "band": 0.5},
+          "width": {"value": 14},
+          "y": {"scale": "y", "field": "lower_box_price"},
+          "y2": {"scale": "y", "field": "upper_box_price"}
+        }
+      }
+    },
+    {
+      "name": "layer_3_marks",
+      "type": "rect",
+      "style": ["tick", "boxplot-median"],
+      "aria": false,
+      "from": {"data": "source_0"},
+      "encode": {
+        "update": {
+          "opacity": {"value": 0.7},
+          "fill": {"value": "white"},
+          "tooltip": {
+            "signal": "{\"Max of Price\": format(datum[\"upper_whisker_price\"], \"\"), \"Q3 of Price\": format(datum[\"upper_box_price\"], \"\"), \"Median of Price\": format(datum[\"mid_box_price\"], \"\"), \"Q1 of Price\": format(datum[\"lower_box_price\"], \"\"), \"Min of Price\": format(datum[\"lower_whisker_price\"], \"\"), \"Borough\": isValid(datum[\"borough\"]) ? datum[\"borough\"] : \"\"+datum[\"borough\"], \"borough\": isValid(datum[\"borough\"]) ? datum[\"borough\"] : \"\"+datum[\"borough\"]}"
+          },
+          "xc": {"scale": "x", "field": "borough", "band": 0.5},
+          "yc": {"scale": "y", "field": "mid_box_price"},
+          "width": {"value": 14},
+          "height": {"value": 1}
+        }
+      }
+    }
+  ],
+  "scales": [
+    {
+      "name": "x",
+      "type": "band",
+      "domain": {"data": "source_0", "field": "borough", "sort": true},
+      "range": [0, {"signal": "width"}],
+      "paddingInner": 0,
+      "paddingOuter": 0
+    },
+    {
+      "name": "y",
+      "type": "linear",
+      "domain": [0, 15000000],
+      "range": [{"signal": "height"}, 0],
+      "zero": false,
+      "nice": true
+    },
+    {
+      "name": "color",
+      "type": "ordinal",
+      "domain": {"data": "source_0", "field": "borough", "sort": true},
+      "range": ["#03045e", "#0096c7", "#90e0ef", "#c77dff", "#3a86ff"]
+    }
+  ],
+  "axes": [
+    {
+      "scale": "y",
+      "orient": "left",
+      "gridScale": "x",
+      "grid": false,
+      "tickCount": {"signal": "ceil(height/40)"},
+      "domain": false,
+      "labels": false,
+      "aria": false,
+      "maxExtent": 0,
+      "minExtent": 0,
+      "ticks": false,
+      "zindex": 0
+    },
+    {
+      "scale": "x",
+      "orient": "bottom",
+      "grid": false,
+      "title": "Borough",
+      "labelAlign": "right",
+      "labelAngle": 270,
+      "labelBaseline": "middle",
+      "zindex": 0
+    },
+    {
+      "scale": "y",
+      "orient": "left",
+      "grid": false,
+      "title": "Price",
+      "labelOverlap": true,
+      "tickCount": {"signal": "ceil(height/40)"},
+      "zindex": 0
+    }
+  ],
+  "legends": [{"fill": "color", "symbolType": "square", "title": "Borough"}],
+  "config": {}
+}

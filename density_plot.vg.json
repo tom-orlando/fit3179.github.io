@@ -1,0 +1,334 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "background": "white",
+  "padding": 5,
+  "width": 700,
+  "height": 500,
+  "title": {
+    "text": "Distribution of prices by borough",
+    "frame": "group",
+    "fontSize": 25,
+    "font": "Montserrat"
+  },
+  "style": "cell",
+  "data": [
+    {"name": "grid_store"},
+    {
+      "name": "source_0",
+      "url": "https://raw.githubusercontent.com/tom-orlando/tom-orlando.github.io/master/data/nyc-rolling-sales-clean_v4.csv",
+      "format": {"type": "csv", "delimiter": ","},
+      "transform": [
+        {
+          "type": "kde",
+          "field": "price",
+          "groupby": ["borough"],
+          "extent": [0, 20000000],
+          "as": ["value", "density"]
+        },
+        {
+          "type": "impute",
+          "field": "density",
+          "groupby": ["borough"],
+          "key": "value",
+          "method": "value",
+          "value": 0
+        },
+        {
+          "type": "stack",
+          "groupby": ["value"],
+          "field": "density",
+          "sort": {"field": ["borough"], "order": ["descending"]},
+          "as": ["density_start", "density_end"],
+          "offset": "zero"
+        }
+      ]
+    }
+  ],
+  "signals": [
+    {
+      "name": "unit",
+      "value": {},
+      "on": [
+        {"events": "mousemove", "update": "isTuple(group()) ? group() : unit"}
+      ]
+    },
+    {"name": "grid", "update": "vlSelectionResolve(\"grid_store\", \"union\")"},
+    {
+      "name": "grid_value",
+      "on": [
+        {
+          "events": {"signal": "grid_translate_delta"},
+          "update": "panLinear(grid_translate_anchor.extent_x, -grid_translate_delta.x / width)"
+        },
+        {
+          "events": {"signal": "grid_zoom_delta"},
+          "update": "zoomLinear(domain(\"x\"), grid_zoom_anchor.x, grid_zoom_delta)"
+        },
+        {"events": [{"source": "scope", "type": "dblclick"}], "update": "null"}
+      ]
+    },
+    {
+      "name": "grid_density",
+      "on": [
+        {
+          "events": {"signal": "grid_translate_delta"},
+          "update": "panLinear(grid_translate_anchor.extent_y, grid_translate_delta.y / height)"
+        },
+        {
+          "events": {"signal": "grid_zoom_delta"},
+          "update": "zoomLinear(domain(\"y\"), grid_zoom_anchor.y, grid_zoom_delta)"
+        },
+        {"events": [{"source": "scope", "type": "dblclick"}], "update": "null"}
+      ]
+    },
+    {
+      "name": "grid_tuple",
+      "on": [
+        {
+          "events": [{"signal": "grid_value || grid_density"}],
+          "update": "grid_value && grid_density ? {unit: \"layer_0\", fields: grid_tuple_fields, values: [grid_value,grid_density]} : null"
+        }
+      ]
+    },
+    {
+      "name": "grid_tuple_fields",
+      "value": [
+        {"field": "value", "channel": "x", "type": "R"},
+        {"field": "density", "channel": "y", "type": "R"}
+      ]
+    },
+    {
+      "name": "grid_translate_anchor",
+      "value": {},
+      "on": [
+        {
+          "events": [{"source": "scope", "type": "mousedown"}],
+          "update": "{x: x(unit), y: y(unit), extent_x: domain(\"x\"), extent_y: domain(\"y\")}"
+        }
+      ]
+    },
+    {
+      "name": "grid_translate_delta",
+      "value": {},
+      "on": [
+        {
+          "events": [
+            {
+              "source": "window",
+              "type": "mousemove",
+              "consume": true,
+              "between": [
+                {"source": "scope", "type": "mousedown"},
+                {"source": "window", "type": "mouseup"}
+              ]
+            }
+          ],
+          "update": "{x: grid_translate_anchor.x - x(unit), y: grid_translate_anchor.y - y(unit)}"
+        }
+      ]
+    },
+    {
+      "name": "grid_zoom_anchor",
+      "on": [
+        {
+          "events": [{"source": "scope", "type": "wheel", "consume": true}],
+          "update": "{x: invert(\"x\", x(unit)), y: invert(\"y\", y(unit))}"
+        }
+      ]
+    },
+    {
+      "name": "grid_zoom_delta",
+      "on": [
+        {
+          "events": [{"source": "scope", "type": "wheel", "consume": true}],
+          "force": true,
+          "update": "pow(1.001, event.deltaY * pow(16, event.deltaMode))"
+        }
+      ]
+    },
+    {
+      "name": "grid_modify",
+      "on": [
+        {
+          "events": {"signal": "grid_tuple"},
+          "update": "modify(\"grid_store\", grid_tuple, true)"
+        }
+      ]
+    }
+  ],
+  "marks": [
+    {
+      "name": "layer_0_pathgroup",
+      "type": "group",
+      "from": {
+        "facet": {
+          "name": "faceted_path_layer_0_main",
+          "data": "source_0",
+          "groupby": ["borough"]
+        }
+      },
+      "encode": {
+        "update": {
+          "width": {"field": {"group": "width"}},
+          "height": {"field": {"group": "height"}}
+        }
+      },
+      "marks": [
+        {
+          "name": "layer_0_marks",
+          "type": "area",
+          "clip": true,
+          "style": ["area"],
+          "sort": {"field": "datum[\"value\"]"},
+          "interactive": true,
+          "from": {"data": "faceted_path_layer_0_main"},
+          "encode": {
+            "update": {
+              "opacity": {"value": 0.7},
+              "strokeOpacity": {"value": 1},
+              "interpolate": {"value": "catmull-rom"},
+              "orient": {"value": "vertical"},
+              "fill": {"scale": "color", "field": "borough"},
+              "description": {
+                "signal": "\"Price: \" + (format(datum[\"value\"], \"\")) + \"; Density: \" + (format(datum[\"density\"], \"\")) + \"; borough: \" + (isValid(datum[\"borough\"]) ? datum[\"borough\"] : \"\"+datum[\"borough\"])"
+              },
+              "x": {"scale": "x", "field": "value"},
+              "y": {"scale": "y", "field": "density_end"},
+              "y2": {"scale": "y", "field": "density_start"},
+              "defined": {
+                "signal": "isValid(datum[\"value\"]) && isFinite(+datum[\"value\"]) && isValid(datum[\"density\"]) && isFinite(+datum[\"density\"])"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "layer_1_pathgroup",
+      "type": "group",
+      "from": {
+        "facet": {
+          "name": "faceted_path_layer_1_main",
+          "data": "source_0",
+          "groupby": ["borough"]
+        }
+      },
+      "encode": {
+        "update": {
+          "width": {"field": {"group": "width"}},
+          "height": {"field": {"group": "height"}}
+        }
+      },
+      "marks": [
+        {
+          "name": "layer_1_marks",
+          "type": "line",
+          "clip": true,
+          "style": ["line"],
+          "sort": {"field": "datum[\"value\"]"},
+          "interactive": false,
+          "from": {"data": "faceted_path_layer_1_main"},
+          "encode": {
+            "update": {
+              "interpolate": {"value": "catmull-rom"},
+              "stroke": {"scale": "color", "field": "borough"},
+              "description": {
+                "signal": "\"Price: \" + (format(datum[\"value\"], \"\")) + \"; Density: \" + (format(datum[\"density\"], \"\")) + \"; borough: \" + (isValid(datum[\"borough\"]) ? datum[\"borough\"] : \"\"+datum[\"borough\"])"
+              },
+              "x": {"scale": "x", "field": "value"},
+              "y": {"scale": "y", "field": "density_end"},
+              "defined": {
+                "signal": "isValid(datum[\"value\"]) && isFinite(+datum[\"value\"]) && isValid(datum[\"density\"]) && isFinite(+datum[\"density\"])"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "x",
+      "type": "linear",
+      "domain": [0, 2000000],
+      "domainRaw": {"signal": "grid[\"value\"]"},
+      "range": [0, {"signal": "width"}],
+      "nice": true,
+      "zero": true
+    },
+    {
+      "name": "y",
+      "type": "linear",
+      "domain": [0, 0.000003],
+      "domainRaw": {"signal": "grid[\"density\"]"},
+      "range": [{"signal": "height"}, 0],
+      "nice": true,
+      "zero": true
+    },
+    {
+      "name": "color",
+      "type": "ordinal",
+      "domain": {"data": "source_0", "field": "borough", "sort": true},
+      "range": ["#03045e", "#0096c7", "#90e0ef", "#c77dff", "#3a86ff"]
+    }
+  ],
+  "axes": [
+    {
+      "scale": "x",
+      "orient": "bottom",
+      "gridScale": "y",
+      "grid": false,
+      "tickCount": {"signal": "ceil(width/40)"},
+      "domain": false,
+      "labels": false,
+      "aria": false,
+      "maxExtent": 0,
+      "minExtent": 0,
+      "ticks": false,
+      "zindex": 0
+    },
+    {
+      "scale": "y",
+      "orient": "left",
+      "gridScale": "x",
+      "grid": false,
+      "tickCount": {"signal": "ceil(height/40)"},
+      "domain": false,
+      "labels": false,
+      "aria": false,
+      "maxExtent": 0,
+      "minExtent": 0,
+      "ticks": false,
+      "zindex": 0
+    },
+    {
+      "scale": "x",
+      "orient": "bottom",
+      "grid": false,
+      "title": "Price",
+      "labelFlush": true,
+      "labelOverlap": true,
+      "tickCount": {"signal": "ceil(width/40)"},
+      "zindex": 0
+    },
+    {
+      "scale": "y",
+      "orient": "left",
+      "grid": false,
+      "title": "Density",
+      "labelOverlap": true,
+      "tickCount": {"signal": "ceil(height/40)"},
+      "zindex": 0
+    }
+  ],
+  "legends": [
+    {
+      "fill": "color",
+      "symbolType": "circle",
+      "title": "Borough",
+      "encode": {"symbols": {"update": {"opacity": {"value": 0.7}}}},
+      "stroke": "color"
+    }
+  ],
+  "config": {}
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
+  "description": "A vertical box plot showing median, min, and max gross square feet.",
+  "width": 700,
+  "height": 500,
+  "title": {"text": "Distribution of prices by borough", "frame": "group", "fontSize": 25, "font": "Montserrat"},
+  "data": {
+    "url": "https://raw.githubusercontent.com/tom-orlando/tom-orlando.github.io/master/data/nyc-rolling-sales-clean_v4.csv"
+   },
+  "mark": {
+    "type": "boxplot",
+    "extent": "min-max"
+  },
+  "encoding": {
+    "x": {"field": "borough", "type": "nominal", "title": "Borough"},
+    "color": {"field": "borough", "type": "nominal", "scale": {"range": ["#03045e", "#0096c7", "#90e0ef", "#c77dff","#3a86ff"]}},
+    "y": {
+      "field": "price",
+      "title": "Price",
+      "type": "quantitative",
+      "scale": {"zero": false, "domain": [0, 15000000]}
+    }
+  }
+}
