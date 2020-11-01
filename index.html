@@ -100,9 +100,38 @@
           <h2>Are these old properties or new establishments?</h2>
           <p>It seems property built in the mid 1800's has the highest median sale price. How could this be?<br><br>
             This is likely due to the large office buildings and commercial property being bought and sold, majority of which were built a long time ago.
-            Any idea what the large spike in 1965 might be?  
+            Any idea what the large spike in 1971 might be?  
           </p>
         </div>  
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="dark-container">
+      <div class="container">
+        <p>Based on what we've seen so far, it seems borough #1 (Manhattan) is the most expensive. But you might wonder - just how much more expensive?
+           And how are prices distributed amongst boroughs? It would be great to understand how the infamous Manhattan borough fares against it's neighboring
+           peers, and if there are some cool facts we can find out when diving deeper into the data...<br><br><b>The following plots aim to do just that</b></p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container-results" >
+      <div class="container">
+        <h2 class="results-title">Quick facts on CAD</h2>
+        <div class="card-wrap">
+          <div class="card-right">
+            <ul class="card-container">
+              <div id=vis4></div>
+          </div>
+
+          <div class="card">
+            <ul class="card-container">
+              <div id="vis5"></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -126,6 +155,8 @@
     var specVis1 = "https://tom-orlando.github.io/chloro.vg.json";
     var specVis2 = "https://tom-orlando.github.io/dot_plot.vg.json";
     var specVis3 = "https://tom-orlando.github.io/area_plot.vg.json";
+    var specVis4 = "https://tom-orlando.github.io/density_plot.vg.json";
+    var specVis5 = "https://tom-orlando.github.io/box_plot.vg.json";
 
     vegaEmbed('#vis1', specVis1, {"actions":false}).then(function(result) {
       // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
@@ -136,6 +167,14 @@
     }).catch(console.error);
     
     vegaEmbed('#vis3', specVis3, {"actions":false}).then(function(result) {
+      // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+    }).catch(console.error);
+    
+    vegaEmbed('#vis4', specVis4, {"actions":false}).then(function(result) {
+      // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
+    }).catch(console.error);
+    
+    vegaEmbed('#vis5', specVis5, {"actions":false}).then(function(result) {
       // Access the Vega view instance (https://vega.github.io/vega/docs/api/view/) as result.view
     }).catch(console.error);
   </script>

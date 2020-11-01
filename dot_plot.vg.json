@@ -50,6 +50,12 @@
     }
   ],
 
+  "selection": {
+    "grid": {
+      "type": "interval", "bind": "scales"
+    }
+  },
+
   
   "signals": [
     {
@@ -229,7 +235,7 @@
       "name": "color",
       "type": "ordinal",
       "domain": ["1", "2", "3", "4", "5"],
-      "range": ["#111728", "#03045e", "#0096c7", "#90e0ef", "#c77dff"]
+      "range": ["#03045e", "#0096c7", "#90e0ef", "#c77dff","#3a86ff"]
     },
     {
       "name": "size",
