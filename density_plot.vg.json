@@ -5,7 +5,7 @@
   "width": 500,
   "height": 300,
   "title": {
-    "text": "Distribution of prices by borough",
+    "text": "Distribution density of prices by borough",
     "frame": "group",
     "fontSize": 25,
     "font": "Montserrat"

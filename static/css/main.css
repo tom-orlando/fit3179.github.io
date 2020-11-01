@@ -79,6 +79,13 @@ h1, .subhead {
   padding: 3em 0 2em;
 }
 
+.graph-text-container {
+  width: 100%;
+  color: #111728;
+  margin-top: 10%;
+  padding: 3em 0 2em;
+}
+
 .dark-container-2 {
   width: 100%;
   background: #EA7B74;
@@ -101,6 +108,24 @@ h1, .subhead {
 }
 
 .dark-container ul li:nth-child(2) img {
+  width: 27%;
+  margin-bottom: 1.5em;
+}
+
+.graph-text-container ul li {
+  margin-bottom: 3em;
+}
+
+.graph-text-container ul li p {
+  font-size: 16px;
+}
+
+.graph-text-container img {
+  width: 30%;
+  margin-bottom: 1.5em;
+}
+
+.graph-text-container ul li:nth-child(2) img {
   width: 27%;
   margin-bottom: 1.5em;
 }
