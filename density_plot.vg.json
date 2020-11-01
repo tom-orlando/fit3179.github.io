@@ -2,8 +2,8 @@
   "$schema": "https://vega.github.io/schema/vega/v5.json",
   "background": "white",
   "padding": 5,
-  "width": 700,
-  "height": 500,
+  "width": 500,
+  "height": 300,
   "title": {
     "text": "Distribution of prices by borough",
     "frame": "group",
